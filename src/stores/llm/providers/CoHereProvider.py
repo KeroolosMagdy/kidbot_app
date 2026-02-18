@@ -1,4 +1,4 @@
-from stores import LLMInterface
+from ..import LLMInterface
 from ..LLMEnum import  CohereEnums, DocumentTypeEnum
 import cohere
 import logging

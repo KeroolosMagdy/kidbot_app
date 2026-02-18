@@ -1,6 +1,6 @@
-from stores import LLMInterface
+from .. import LLMInterface
 from openai import OpenAI
-from ..LLMEnum import LLMEnum, OpenAIEnums
+from .. import LLMEnum, OpenAIEnums
 import logging
 class OpenAIProvider(LLMInterface):
     def __init__(self, api_key: str,api_url: str = None,default_input_max_character: int = 1000,default_generation_max_output_token: int = 1000,deafault_generation_temperature: float = 0.1):
@@ -77,4 +77,4 @@ class OpenAIProvider(LLMInterface):
 
     def construct_prompt(self, prompt: str, role:str):
         return {"role": role, 
-                "content":self.process_text( prompt)}
+                "content":self.process_text(prompt)}
