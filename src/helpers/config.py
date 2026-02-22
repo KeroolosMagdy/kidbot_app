@@ -25,7 +25,8 @@ class Settings (BaseSettings):
 
     INPUT_DEFAUKT_MAC_CHARCTERS:int= None
     GENERATION_DEFAULT_MAX_TOKENS:int= None
-    GENERATION_DEFAULT_TEMPERATURE:int= None
+    GENERATION_DEFAULT_TEMPERATURE:float= None
+    EMPEDDING_MODEL_SIZE:int= None
 
     VECTOR_DB_BACKEND:str= None
     VECTOR_DB_PATH:str= None

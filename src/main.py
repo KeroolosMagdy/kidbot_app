@@ -1,8 +1,8 @@
 from fastapi import FastAPI
-from routes import base, data
+from routes import base, data,nlp
 from motor.motor_asyncio import AsyncIOMotorClient
 from stores.llm.LLMProviderFactory import LLMProviderFactory
-from stores.vectordb import VectorDBProviderFactory
+from stores.vectordb.VectorDBProviderFactory import VectorDBProviderFactory
 
  
 from helpers.config import get_settings, Settings
@@ -23,7 +23,7 @@ async def startup_span():
 
      #embedding backend
     app.Embedding_client = llm_provider_factory.create(settings.EMBEDDING_BACKEND)
-    app.Embedding_client.set_embedding_model(settings.EMBEDDING_MODEL_ID, settings.EMBEDDING_DEFAULT_MAX_TOKENS)
+    app.Embedding_client.set_embedding_model(model_id=settings.EMBEDDING_MODEL_ID, embedding_size=settings.EMPEDDING_MODEL_SIZE)
 
      #vector backend
     app.Vector_client = vector_provider_factory.create(provider=settings.VECTOR_DB_BACKEND)
@@ -35,9 +35,10 @@ async def shutdown_span():
 
     
 
+app.on_event("startup")(startup_span)
+app.on_event("shutdown")(shutdown_span)
 
-app.router.lifespan.onstartup.append(startup_span)
-app.router.lifespan.onshutdown.append(shutdown_span)    
 app.include_router(base.base_router)
 app.include_router(data.data_router)
+app.include_router(nlp.nlp_router)
 
