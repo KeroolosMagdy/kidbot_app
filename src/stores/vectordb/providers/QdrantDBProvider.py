@@ -3,6 +3,7 @@ from qdrant_client import models, QdrantClient
 from ..VectorDBEnums import VectorDBEnums, DistanceMethodEnums
 from ..VectorDBInterface import VectorDBInterface
 import logging
+import os
 from typing import List
 
 

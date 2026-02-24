@@ -64,10 +64,16 @@ class CohereProvider(LLMInterface):
         input_type= CohereEnums.DOCUMENT.value if document_type == DocumentTypeEnum.DOCUMENT.value else CohereEnums.QUERY.value
         response = self.client.embed(
             model=self.embedding_model_id,
-            input=[self.process_text(text)],
+            texts=[self.process_text(text)],
             input_type=input_type,
             embedding_types=["float"]
         )
-        if not response or not response.embeddings or not response.embeddings[0] or not response.embeddings.float: 
+        if not response or not response.embeddings or not response.embeddings.float_:
             self.logger.error("No embeddings received from Cohere API.")
             return None
+        return response.embeddings.float_[0]
+
+
+
+        
+    
