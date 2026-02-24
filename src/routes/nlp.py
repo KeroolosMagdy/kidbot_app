@@ -144,8 +144,11 @@ async def search_index(request: Request,project_id: str,search_request:SearchReq
             "signal": ResponseSignal.VERCTORDB_SEARCH_SUCCESS.value,
             "results": results
         }
-    )
- 
+    ) 
+
+@nlp_router.post("/index/generat/{project_id}")
+def generate_from_index(request: Request,project_id: str,gen_request:str):
+   pass
 
   
       
