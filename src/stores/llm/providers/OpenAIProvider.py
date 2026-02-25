@@ -11,6 +11,7 @@ class OpenAIProvider(LLMInterface):
         self.default_input_max_character = default_input_max_character
         self.default_generation_max_output_token = default_generation_max_output_token
         self.default_generation_temperature = deafault_generation_temperature
+        self.enums=OpenAIEnums
 
         self.generation_model_id =  None
         self.embedding_model_id = None

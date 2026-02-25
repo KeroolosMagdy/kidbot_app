@@ -18,6 +18,8 @@ class ResponseSignal(Enum):
     VERCTORDB_COLLECTION_NOT_FOUND="vectordb_collection_not_found"
     VERCTORDB_SEARCH_SUCCESS="vectordb_search_success"
     VERCTORDB_SEARCH_FAILED="vectordb_search_failed"
+    RAG_ANSWER_ERROR="rag_answer_generation_error"
+    RAG_ANSWER_SUCCESS="rag_answer_generated_successfully"
     
 
     

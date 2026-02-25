@@ -1,7 +1,7 @@
 from .BaseController import BaseController
 from models.dp_schemes import Project, DataChunk
 from typing import List
-from stores.llm import DocumentTypeEnum
+from stores.llm import DocumentTypeEnum, OpenAIEnums, CohereEnums
 import json 
 
 
@@ -70,11 +70,49 @@ class NLPController (BaseController):
         )
         if not search_results:
             return False
-        return json.loads(
-         json.dumps(
-             search_results, default = lambda x: x.__dict__
-            
-         )
-        )
+        return  search_results
      
+     def answer_rag_question(self, project: Project, query: str, limit: int = 10):
         
+        answer, full_prompt, chat_history = None, None, None
+
+        # step1: retrieve related documents
+        retrieved_documents = self.search_verctor_db_collection(
+            project=project,
+            text=query,
+            limit=limit,
+        )
+
+        if not retrieved_documents or len(retrieved_documents) == 0:
+            return answer, full_prompt, chat_history
+        
+        # step2: Construct LLM prompt
+        system_prompt = self.template_parser.get("rag", "system_prompt")
+
+        documents_prompts = "\n".join([
+            self.template_parser.get("rag", "document_prompt", {
+                    "doc_num": idx + 1,
+                    "chunk_text": doc.text,
+            })
+            for idx, doc in enumerate(retrieved_documents)
+        ])
+
+        footer_prompt = self.template_parser.get("rag", "footer_prompt")
+
+        # step3: Construct Generation Client Prompts
+        chat_history = [
+            self.generation_client.construct_prompt(
+                prompt=system_prompt,
+                role=self.generation_client.enums.SYSTEM.value,
+            )
+        ]
+
+        full_prompt = "\n\n".join([ documents_prompts,  footer_prompt])
+
+        # step4: Retrieve the Answer
+        answer = self.generation_client.generate_text(
+            prompt=full_prompt,
+            chat_history=chat_history
+        )
+
+        return answer, full_prompt, chat_history
