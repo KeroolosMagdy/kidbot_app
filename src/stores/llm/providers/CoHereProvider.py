@@ -46,19 +46,32 @@ class CohereProvider(LLMInterface):
         max_output_tokens = max_output_tokens if max_output_tokens else self.default_generation_max_output_token
         temperature = temperature if temperature else self.default_generation_temperature
 
+        # Convert chat_history to messages format for Cohere V2Client
+        messages = []
+        if chat_history:
+            messages.extend(chat_history)
+        
+        # Add the user message
+        messages.append({
+            "role": CohereEnums.USER.value,
+            "content": self.process_text(prompt)
+        })
+
         response = self.client.chat(
-            model = self.generation_model_id,
-            chat_history = chat_history,
-            message = self.process_text(prompt),
-            temperature = temperature,
-            max_tokens = max_output_tokens
+            model=self.generation_model_id,
+            messages=messages,
+            temperature=temperature,
+            max_tokens=max_output_tokens
         )
 
-        if not response or not response.text:
+        if not response or not response.message or not response.message.content:
             self.logger.error("Error while generating text with CoHere")
             return None
         
-        return response.text
+        # Extract text from response - for V2Client, it's in response.message.content[0].text
+        if hasattr(response.message.content[0], 'text'):
+            return response.message.content[0].text
+        return str(response.message.content[0])
     
      def construct_prompt(self, prompt: str, role:str):
         return {"role": role, 

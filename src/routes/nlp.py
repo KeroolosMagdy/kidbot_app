@@ -41,7 +41,7 @@ async def index_project(request: Request, project_id: str, push_request: PushReq
         vectordb_client=request.app.Vector_client,
         generation_client=request.app.Generation_client,
         embedding_client=request.app.Embedding_client,
-        template_parser=None
+        template_parser=request.app.template_parser
     )
     has_records= True
     page_no=1
@@ -102,7 +102,7 @@ async def get_project_index_info(request: Request,project_id: str):
         vectordb_client=request.app.Vector_client,
         generation_client=request.app.Generation_client,
         embedding_client=request.app.Embedding_client,
-        template_parser=None
+        template_parser=request.app.template_parser
     )
     collection_info = nlp_controller.get_vector_db_collection_info(project=project)
     return JSONResponse(
@@ -124,7 +124,7 @@ async def search_index(request: Request,project_id: str,search_request:SearchReq
         vectordb_client=request.app.Vector_client,
         generation_client=request.app.Generation_client,
         embedding_client=request.app.Embedding_client,
-        template_parser=None
+        template_parser=request.app.template_parser
     )
     results = nlp_controller.search_verctor_db_collection(
         project=project,
