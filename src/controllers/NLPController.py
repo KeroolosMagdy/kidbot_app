@@ -97,10 +97,12 @@ class NLPController (BaseController):
             for idx, doc in enumerate(retrieved_documents)
         ])
 
-        footer_prompt = self.template_parser.get("rag", "footer_prompt")
+        footer_prompt = self.template_parser.get("rag", "footer_prompt",{
+            "query":query
+        })
 
         # step3: Build the full prompt with system context
-        full_prompt = f"{system_prompt}\n\n{documents_prompts}\n\n{footer_prompt}\n\nQuery: {query}"
+        full_prompt = f"{system_prompt}\n\n{documents_prompts}\n\n{footer_prompt}"
 
         # step4: Retrieve the Answer
         answer = self.generation_client.generate_text(
