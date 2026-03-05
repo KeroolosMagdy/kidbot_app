@@ -12,6 +12,28 @@ class Settings (BaseSettings):
 
     MONGODB_URL: str
     MONGODB_DATABASE:str
+    # ============================= LLM BACKENDS =============================
+    GENERATION_BACKEND :str = None
+    EMBEDDING_BACKEND:str= None
+
+    OPENAI_API_KEY:str= None
+    OPENAI_API_URL:str= None
+    COHERE_API_KEY:str= None
+
+    GENERATION_MODEL_ID:str= None
+    EMBEDDING_MODEL_ID:str= None
+
+    INPUT_DEFAUKT_MAC_CHARCTERS:int= None
+    GENERATION_DEFAULT_MAX_TOKENS:int= None
+    GENERATION_DEFAULT_TEMPERATURE:float= None
+    EMPEDDING_MODEL_SIZE:int= None
+
+    VECTOR_DB_BACKEND:str= None
+    VECTOR_DB_PATH:str= None
+    VECTOR_DB_DISTANCE_METHOD:str= None
+    DEFAULT_LANG:str
+    PRIMARY_LANG:str
+
     class Config:
         env_file = ".env"
 def get_settings():     
